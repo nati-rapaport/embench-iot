@@ -482,6 +482,105 @@ rv32_gcc_opt_runset = {
         },
     ]
 }
+rv32_eh2_na7_gcc_speed_rel_runset = {
+    'name' : 'RV32IMC GCC',
+    'speed benchmark' : {
+        'timeout' : 30,
+        'arglist' : [
+            './benchmark_speed.py',
+            '--target-module=run_nexys-a7-eh2',
+            '--json-output',
+            '--no-json-comma',
+        ],
+        'desc' : 'run'
+    },
+    'runs' : [
+        { 'name' : 'rv32imc-eh2-opt-O2-rel',
+          'arch' : 'riscv32',
+          'chip' : 'swerv-eh2',
+	       'board' : 'nexys-a7-eh2',
+          'cc' : 'riscv64-unknown-elf-gcc',
+          'cflags' : '-c -g -mabi=ilp32 -O2 -ffunction-sections -march=rv32imac',
+          'ldflags' : '-O2 -march=rv32imac -mabi=ilp32 -Wl,-gc-sections -T/media/ronen/Linux/embecosm/embench-iot/config/riscv32/boards/nexys-a7-eh2/link.lds -nostartfiles',
+          'path' : '/media/ronen/Linux/bitbucket/riscv-fw-infrastructure/WD-Firmware/demo/build/toolchain/gcc/bin/',
+        },
+    ]
+}
+
+rv32_eh2_na7_gcc_speed_abs_runset = {
+    'name' : 'RV32IMC GCC',
+    'speed benchmark' : {
+        'timeout' : 30,
+        'arglist' : [
+            './benchmark_speed.py',
+            '--target-module=run_nexys-a7-eh2',
+            '--json-output',
+            '--no-json-comma',
+            '--absolute',
+        ],
+        'desc' : 'run'
+    },
+    'runs' : [
+        { 'name' : 'rv32imc-eh2-opt-O2-abs',
+          'arch' : 'riscv32',
+          'chip' : 'swerv-eh2',
+	       'board' : 'nexys-a7-eh2',
+          'cc' : 'riscv64-unknown-elf-gcc',
+          'cflags' : '-c -g -mabi=ilp32 -O2 -ffunction-sections -march=rv32imac',
+          'ldflags' : '-O2 -march=rv32imac -mabi=ilp32 -Wl,-gc-sections -T/media/ronen/Linux/embecosm/embench-iot/config/riscv32/boards/nexys-a7-eh2/link.lds -nostartfiles',
+          'path' : '/media/ronen/Linux/bitbucket/riscv-fw-infrastructure/WD-Firmware/demo/build/toolchain/gcc/bin/',
+        },
+    ]
+}
+
+rv32_eh2_na7_gcc_size_rel_runset = {
+    'name' : 'RV32IMC GCC',
+    'size benchmark' : {
+        'timeout' : 30,
+        'arglist' : [
+            './benchmark_size.py',
+            '--json-output',
+            '--json-comma',
+        ],
+        'desc' : 'sized'
+    },
+    'runs' : [
+        { 'name' : 'rv32imc-eh2-opt-Os-rel',
+          'arch' : 'riscv32',
+          'chip' : 'swerv-eh2',
+	       'board' : 'generic',
+          'cc' : 'riscv64-unknown-elf-gcc',
+          'cflags' : '-c -g -mabi=ilp32 -Os -ffunction-sections -march=rv32imac',
+          'ldflags' : '-Os -march=rv32imac -mabi=ilp32 -Wl,-gc-sections',
+          'path' : '/media/ronen/Linux/bitbucket/riscv-fw-infrastructure/WD-Firmware/demo/build/toolchain/gcc/bin/',
+        },
+    ]
+}
+
+rv32_eh2_na7_gcc_size_abs_runset = {
+    'name' : 'RV32IMC GCC',
+    'size benchmark' : {
+        'timeout' : 30,
+        'arglist' : [
+            './benchmark_size.py',
+            '--json-output',
+            '--json-comma',
+            '--absolute',
+        ],
+        'desc' : 'sized'
+    },
+    'runs' : [
+        { 'name' : 'rv32imc-eh2-opt-Os-abs',
+          'arch' : 'riscv32',
+          'chip' : 'swerv-eh2',
+	       'board' : 'generic',
+          'cc' : 'riscv64-unknown-elf-gcc',
+          'cflags' : '-c -g -mabi=ilp32 -Os -ffunction-sections -march=rv32imac',
+          'ldflags' : '-Os -march=rv32imac -mabi=ilp32 -Wl,-gc-sections',
+          'path' : '/media/ronen/Linux/bitbucket/riscv-fw-infrastructure/WD-Firmware/demo/build/toolchain/gcc/bin/',
+        },
+    ]
+}
 
 rv32_llvm_opt_runset = {
     'name' : 'RV32IMC LLVM optimization comparison',
@@ -1187,6 +1286,26 @@ def build_parser():
         action='store_true',
         help='Run Arm GCC version comparison benchmarks'
     )
+    parser.add_argument(
+        '--rv32-eh2-na7-gcc-size-abs',
+        action='store_true',
+        help='Run EH2 GCC version'
+    )
+    parser.add_argument(
+        '--rv32-eh2-na7-gcc-size-rel',
+        action='store_true',
+        help='Run EH2 GCC version'
+    )
+    parser.add_argument(
+        '--rv32-eh2-na7-gcc-speed-abs',
+        action='store_true',
+        help='Run EH2 GCC version'
+    )
+    parser.add_argument(
+        '--rv32-eh2-na7-gcc-speed-rel',
+        action='store_true',
+        help='Run EH2 GCC version'
+    )
 
     return parser
 
@@ -1333,6 +1452,14 @@ def main():
         runsets.append(gcc9_arch_runset)
     if args.arm_gcc_version:
         runsets.append(arm_gcc_version_runset)
+    if args.rv32_eh2_na7_gcc_size_rel:
+        runsets.append(rv32_eh2_na7_gcc_size_rel_runset)
+    if args.rv32_eh2_na7_gcc_size_abs:
+        runsets.append(rv32_eh2_na7_gcc_size_abs_runset)
+    if args.rv32_eh2_na7_gcc_speed_rel:
+        runsets.append(rv32_eh2_na7_gcc_speed_rel_runset)
+    if args.rv32_eh2_na7_gcc_speed_abs:
+        runsets.append(rv32_eh2_na7_gcc_speed_abs_runset)
 
     if not runsets:
         print("ERROR: No run sets specified")
